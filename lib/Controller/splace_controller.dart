@@ -11,7 +11,7 @@ class SplaceController extends GetxController{
 
   void splaceScreen(){
     Future.delayed(const Duration(seconds: 1),(){
-      Get.offAll(const BottomTabNavigator());
+      Get.offAll(const LoginScreen());
     });
   }
 }

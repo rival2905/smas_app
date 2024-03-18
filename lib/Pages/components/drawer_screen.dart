@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:smas_app/Controller/auth_controller.dart';
+import 'package:get/get.dart';
 
 class DrawerScreen extends StatelessWidget {
   const DrawerScreen({super.key});
 
   @override
   Widget build(BuildContext context){
+    AuthController authController = Get.put(AuthController());
+
     return Drawer(
       child: ListView(
         children: [
@@ -51,7 +55,7 @@ class DrawerScreen extends StatelessWidget {
             iconData: Icons.logout,
             title: "Logout",
             onTilePressed: () {
-
+              authController.modalLogout();
             },
           ),
         ],

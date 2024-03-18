@@ -4,12 +4,15 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:smas_app/Pages/Auth/signup_screen.dart';
+import 'package:smas_app/Controller/auth_controller.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context){
+    AuthController authController = Get.put(AuthController());
+  
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -37,6 +40,7 @@ class LoginScreen extends StatelessWidget {
                 height: 17,
               ),
               TextField(
+                controller: authController.emailController,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
@@ -53,6 +57,7 @@ class LoginScreen extends StatelessWidget {
                 height: 17,
               ),
               TextField(
+                controller: authController.passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -130,16 +135,22 @@ class LoginScreen extends StatelessWidget {
                 ),
                 child: ElevatedButton(
                   style: raisedButtonStyle,
-                  child: const Text(
+                  
+                  onPressed: authController.submit,
+                  child: authController.isLoading.value ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Color.fromARGB(255, 255, 0, 0),
+                          ),
+                        )
+                  : const Text(
                     "Sign In",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: Color.fromARGB(255, 255, 255, 255)
                     ),
                   ),
-                  onPressed: () {
-                    
-                  },
                 ),
               )
             ],

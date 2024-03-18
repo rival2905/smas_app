@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smas_app/Pages/HomePage/home_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
+
+import 'package:smas_app/Pages/HomePage/home_page.dart';
+import 'package:smas_app/Pages/Post/post_page.dart';
 
 
 
@@ -47,12 +49,7 @@ class BottomTabNavigator extends StatelessWidget {
     
         return [
           HomePage(),
-          const Text(
-            'Account',
-            style: TextStyle(
-              fontSize: 30, fontWeight: FontWeight.bold
-            ),
-          ),
+          PostPage(),
           const Text(
             'Account',
             style: TextStyle(
