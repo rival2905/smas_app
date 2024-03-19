@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
+import 'package:smas_app/Controller/auth_controller.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context){
+    AuthController authController = Get.put(AuthController());
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -36,6 +38,8 @@ class SignUpScreen extends StatelessWidget {
                 height: 17,
               ),
               TextField(
+                controller: authController.nameController,
+
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
@@ -52,6 +56,7 @@ class SignUpScreen extends StatelessWidget {
                 height: 17,
               ),
               TextField(
+                controller: authController.emailController,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
@@ -68,6 +73,8 @@ class SignUpScreen extends StatelessWidget {
                 height: 17,
               ),
               TextField(
+                controller: authController.passwordController,
+
                 textInputAction: TextInputAction.next,
 
                 obscureText: true,
@@ -91,6 +98,7 @@ class SignUpScreen extends StatelessWidget {
                 height: 17,
               ),
               TextField(
+                controller: authController.passwordconfirmController,
                 obscureText: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -158,7 +166,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    
+                    authController.register();
                   },
                 ),
               ),

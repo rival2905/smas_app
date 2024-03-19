@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import '../../../service/api/auth_provider.dart';
@@ -5,10 +7,14 @@ import 'package:smas_app/Models/AuthModel.dart';
 import 'package:smas_app/Pages/HomePage/home_page.dart';
 import 'package:smas_app/Pages/Auth/login_screen.dart';
 import 'package:smas_app/Pages/components/tab_navigator.dart';
+import 'package:http/http.dart' as http;
 
 class AuthController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController passwordconfirmController = TextEditingController();
+
   var buttonEnabled = false.obs;
   var isLoading = false.obs;
   var isShowPassword = false.obs;
@@ -46,6 +52,37 @@ class AuthController extends GetxController {
       });
     }
   }
+
+  Future<void> register() async {
+  var newUser = {
+    "name": nameController.text,
+    "email": emailController.text,
+    "password": passwordController.text,
+    "password_confirmation": passwordconfirmController.text, // corrected the variable name
+  };
+  print(newUser);
+  print("${nameController.text}${emailController.text}${passwordController.text}${passwordconfirmController.text}"); // concatenated the strings using string interpolation
+
+  if (nameController.text.isNotEmpty &&
+      emailController.text.isNotEmpty &&
+      passwordController.text.isNotEmpty &&
+      passwordconfirmController.text.isNotEmpty) {
+    var response = await http.post(
+      Uri.parse("https://smas.official.biz.id/api/user/register"),
+      body: json.encode(newUser), // encoded the newUser as JSON
+      headers: {'content-type': 'application/json'},
+    );
+    if (response.statusCode == 201) {
+      nameController.clear();
+      emailController.clear();
+      passwordController.clear();
+      passwordconfirmController.clear();
+      print("❤️ User Added");
+    }
+  } else {
+    print("❌ Form must be completed");
+  }
+}
 
   void modalLogout() {
     Get.dialog(

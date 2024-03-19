@@ -11,7 +11,7 @@ class AuthService {
 
   static Future<String> login(String email, String password) async {
 
-    var newUrl = "https://lms.official.biz.id/api/login";
+    var newUrl = "https://smas.official.biz.id/api/login";
 
     try {
       final response = await client.post(
