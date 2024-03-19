@@ -11,7 +11,7 @@ class AuthService {
 
   static Future<String> login(String email, String password) async {
 
-    var newUrl = "https://smas.official.biz.id/api/login";
+    var newUrl = "https://lms.official.biz.id/api/login";
 
     try {
       final response = await client.post(
@@ -21,16 +21,18 @@ class AuthService {
           "password": password,
         },
       );
+      final message = json.decode(response.body)['message'];
       if (response.statusCode == 201) {
         final token = json.decode(response.body)['token'];
+
         await storage.write('accestoken', token);
         return 'success';
       } else {
-        return 'failed';
+        return message;
       }
     } catch (e) {
-      print(e);
-      return 'failed';
+      print('oeoeooe $e');
+      return 'Failed';
     }
   }
 }

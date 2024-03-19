@@ -24,13 +24,15 @@ class AuthController extends GetxController {
     }
     if (emailController.text != '' && passwordController.text != '') {
       isLoading.value = true;
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 3));
       await AuthService.login(emailController.text, passwordController.text)
           .then((value) {
         print(value);
         isLoading.value = false;
         if (value == 'success') {
           Get.offAll(const BottomTabNavigator());
+        }else {
+          modalFailedLogin(value);
         }
 
         if (value == 'error') {
@@ -81,6 +83,24 @@ class AuthController extends GetxController {
           ),
         ],
       ),
+    );
+  }
+
+  void modalFailedLogin(String value) {
+    Get.dialog(
+      AlertDialog(
+        title: Text('Something when wrong!'),
+        content: Text("Email or Password did't match!!"),
+        actions: [
+          ElevatedButton(
+            child: Text('OK'),
+            onPressed: () async {
+              Get.back();
+              Get.offAll(const LoginScreen());
+            },
+          ),
+        ],
+      )
     );
   }
 

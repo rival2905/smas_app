@@ -133,7 +133,7 @@ class LoginScreen extends StatelessWidget {
                   border: Border.all(color: Color(0xff00A9FA)),
                   borderRadius: BorderRadius.circular(10)
                 ),
-                child: ElevatedButton(
+                child: Obx(() => ElevatedButton(
                   style: raisedButtonStyle,
                   
                   onPressed: authController.submit,
@@ -151,7 +151,7 @@ class LoginScreen extends StatelessWidget {
                       color: Color.fromARGB(255, 255, 255, 255)
                     ),
                   ),
-                ),
+                )),
               )
             ],
           ),
