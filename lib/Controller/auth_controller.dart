@@ -8,7 +8,7 @@ import 'package:smas_app/Pages/HomePage/home_page.dart';
 import 'package:smas_app/Pages/Auth/login_screen.dart';
 import 'package:smas_app/Pages/components/tab_navigator.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:get_storage/get_storage.dart';
 class AuthController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -20,6 +20,7 @@ class AuthController extends GetxController {
   var isShowPassword = false.obs;
   var emailError = ''.obs;
   var passwordError = ''.obs;
+  final box = GetStorage();
 
   void submit() async {
     if (emailController.text == '') {
@@ -52,7 +53,19 @@ class AuthController extends GetxController {
       });
     }
   }
+  Future<void> logout() async {
+    final response = await http.post(
+      Uri.parse('https://smas.official.biz.id/api/logout'),
+      headers: {'content-type': 'application/json'},
+    );
 
+    if (response.statusCode == 201) {
+      box.remove('token'); // reset token
+      print("❤️ logout success");
+    } else {
+      throw Exception('Failedto logout');
+    }
+  }
   Future<void> register() async {
   var newUser = {
     "name": nameController.text,
@@ -113,6 +126,7 @@ class AuthController extends GetxController {
               ),
             ),
             onPressed: () async {
+      
               Get.back();
               Get.offAll(LoginScreen());
             },
@@ -142,3 +156,4 @@ class AuthController extends GetxController {
   }
 
 }
+
