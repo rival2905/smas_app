@@ -1,10 +1,11 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
-import 'package:smas_app/Pages/Auth/signup_screen.dart';
+import 'package:smas_app/Views/Auth/signup_screen.dart';
 import 'package:smas_app/Controller/auth_controller.dart';
+import 'package:textrich/textrich.dart';
+import 'package:smas_app/Views/components/tab_navigator.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -29,11 +30,11 @@ class LoginScreen extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                "Sport News",
+                "Sport Management System",
+                textAlign: TextAlign.center,
                 style: GoogleFonts.montserrat(
-                  fontSize: 30,
+                  fontSize: 23,
                   fontWeight: FontWeight.w800,
-                  color: Colors.black
                 ),
               ),
               const SizedBox(
@@ -45,20 +46,18 @@ class LoginScreen extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                     color: Color(0xff9E9E9E)
-                    ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   labelText: 'Email',
+                  fillColor: Theme.of(context).colorScheme.primaryContainer,
                 ),
               ),
               const SizedBox(
                 height: 17,
               ),
-              TextField(
+              Obx(() => TextField(
                 controller: authController.passwordController,
-                obscureText: true,
+                obscureText: !authController.isShowPassword.value,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -67,55 +66,45 @@ class LoginScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   labelText: 'Password',
+                  fillColor: Theme.of(context).colorScheme.primaryContainer,
                   suffixIcon: IconButton(
                     onPressed: () {
-                      
+                      authController.isShowPassword.value = !authController.isShowPassword.value;
                     },
-                    icon: Icon(Icons.visibility),
+                    icon: Icon(
+                      authController.isShowPassword.value
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                    ),
                   )
                 ),
-              ),
+              )),
               const SizedBox(
                 height: 0,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Don't have an account yet?",
-                    style: TextStyle(fontSize: 11),
-                  ),
-                // Add spacing between text and button
-                  const SizedBox(
-                    width: 0,
-                  ),
-                  TextButton(
-                    child: Text("Sign Up",
-                      style: GoogleFonts.poppins(
-                        fontSize: 11,
-                        decoration: TextDecoration.underline,
-                        decorationStyle: TextDecorationStyle.wavy,
-                        decorationColor: Color(0xffDD9426),
-                        color: Color(0xffDD9426)
-                      ),
-                    ),
-                    onPressed: () {
-                      // Navigate to sign-up screen
-                     Get.to(SignUpScreen());
-                      
+                  
+                  TextRich(
+                    "Don't have an account yet? Sign Up",
+                    matchTexts: const ["Sign Up"],
+                    matchStyles: const [TextStyle(color: Color(0xffDD9426),fontStyle: FontStyle.italic,fontSize: 11,decoration: TextDecoration.underline, decorationColor: Color(0xffDD9426),)],
+                    onTap: (value){
+                      Get.to(const SignUpScreen());
                     },
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
-                  const SizedBox(
-                    width: 50,
-                  ),
+                  
                   TextButton(
                     child: Text("Forgot Password?",
                       style: GoogleFonts.poppins(
                         fontSize: 11,
+                        fontStyle: FontStyle.italic,
                         decoration: TextDecoration.underline,
                         decorationStyle: TextDecorationStyle.wavy,
-                        decorationColor: Color(0xffDD9426),
-                        color: Color(0xffDD9426)
+                        decorationColor: const Color(0xffDD9426),
+                        color: const Color(0xffDD9426)
                       ),
                     ),
                     onPressed: () {
@@ -124,13 +113,13 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ]
               ),
-              SizedBox(height: 55),
+              const SizedBox(height: 55),
               Container(
                 height: 50,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: const Color(0xff00A9FA),
-                  border: Border.all(color: Color(0xff00A9FA)),
+                  border: Border.all(color: const Color(0xff00A9FA)),
                   borderRadius: BorderRadius.circular(10)
                 ),
                 child: Obx(() => ElevatedButton(
@@ -152,7 +141,18 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 )),
-              )
+              ),
+              const SizedBox(height: 10),
+              TextRich(
+                "Sign In as a Guest",
+                matchTexts: const ["a Guest"],
+                matchStyles: const [TextStyle(color: Color(0xffDD9426),fontStyle: FontStyle.italic,fontSize: 11,decoration: TextDecoration.underline, decorationColor: Color(0xffDD9426),)],
+                onTap: (value){
+                  Get.offAll(const BottomTabNavigator());
+
+                },
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
             ],
           ),
         ),
@@ -165,8 +165,8 @@ class LoginScreen extends StatelessWidget {
 final ButtonStyle raisedButtonStyle= ElevatedButton.styleFrom(
   foregroundColor: const Color(0xff00A9FA), 
   backgroundColor: const Color(0xff00A9FA),
-  minimumSize: Size(88, 36),
-  padding: EdgeInsets.symmetric(horizontal: 16),
+  minimumSize: const Size(88, 36),
+  padding: const EdgeInsets.symmetric(horizontal: 16),
   shape: const RoundedRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(6))
   ),

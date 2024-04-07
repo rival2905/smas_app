@@ -31,7 +31,7 @@ class AuthService {
         return message;
       }
     } catch (e) {
-      print('oeoeooe $e');
+    
       return 'Failed';
     }
   }

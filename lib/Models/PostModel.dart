@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
-class PostPageModel {
+class PostModel {
   String? title;
   String? content;
   String? createdAt;
@@ -12,8 +12,10 @@ class PostPageModel {
   DateTime? updatedAt;
   User? user;
   String? category;
+  String? view;
 
-  PostPageModel({
+
+  PostModel({
     this.title,
     this.content,
     this.createdAt,
@@ -23,16 +25,19 @@ class PostPageModel {
     this.createdBy,
     this.user,
     this.category,
+    this.view,
     this.updatedAt,
   });
 
-  PostPageModel.fromJson(Map<String, dynamic> json) {
+  PostModel.fromJson(Map<String, dynamic> json) {
     title = json["title"];
     content = json["content"];
     createdAt = DateFormat('yyyy-MM-dd').format(DateTime.parse(json["created_at"]));
     path = json["path"];
     id = json["id"];
     slug = json["slug"];
+    view = json["view"].toString();
+
     createdBy = json["created_by"];
     if (json["updated_at"] != null) {
       updatedAt = DateTime.parse(json["updated_at"]);
@@ -51,6 +56,8 @@ class PostPageModel {
     _data["path"] = path;
     _data["id"] = id;
     _data["slug"] = slug;
+    _data["view"] = view;
+
     _data["created_by"] = createdBy;
    if (updatedAt != null) {
       _data["updated_at"] = updatedAt?.toIso8601String();

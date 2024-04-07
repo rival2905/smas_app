@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-import 'package:smas_app/Pages/components/drawer_screen.dart';
+import 'package:smas_app/Views/components/drawer_screen.dart';
 import 'package:smas_app/Controller/post_controller.dart';
-import 'package:smas_app/Pages/Post/post_widgets.dart';
+import 'package:smas_app/Views/Post/Widgets/post_widgets.dart';
 
 
 class PostPage extends StatelessWidget {
@@ -43,26 +43,15 @@ class PostPage extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: 10,
+            child: Obx(() => ListView.builder(
+              padding: const EdgeInsets.only(left: 20,right: 20),
+              itemCount: postPageController.postLista.length,
               itemBuilder: (context, index) {
-                return Container(
-                      height: MediaQuery.of(context).size.height,
-                      child:  Obx(() => GridView.count(
-                        crossAxisSpacing: 1,
-                        mainAxisSpacing: 1,
-                        crossAxisCount: 3,
-                        padding: const EdgeInsets.only(left: 20,right: 20,top: 0),
-                        children: postPageController.postLista
-                        .map(
-                          (e) => PostWidgets(
-                            post: e,
-                          ),
-                        ).toList(),
-                      ))
-                    );
+                return PostWidgets(
+                  post: postPageController.postLista[index],
+                );
               },
-            ),
+            )),
           )
         ],
       ),

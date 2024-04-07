@@ -4,14 +4,16 @@ import 'package:intl/intl.dart';
 class HomePageModel {
   String? title;
   String? content;
-  String? createdAt;
   String? path;
   int? id;
   String? slug;
   String? createdBy;
+  DateTime? createdAt;
   DateTime? updatedAt;
   User? user;
   String? category;
+  String? view;
+
 
   HomePageModel({
     this.title,
@@ -23,16 +25,19 @@ class HomePageModel {
     this.createdBy,
     this.user,
     this.category,
+    this.view,
     this.updatedAt,
   });
 
   HomePageModel.fromJson(Map<String, dynamic> json) {
     title = json["title"];
     content = json["content"];
-    createdAt = DateFormat('yyyy-MM-dd').format(DateTime.parse(json["created_at"]));
+    createdAt = DateTime.parse(json["created_at"]);
     path = json["path"];
     id = json["id"];
     slug = json["slug"];
+    view = json["view"].toString();
+
     createdBy = json["created_by"];
     if (json["updated_at"] != null) {
       updatedAt = DateTime.parse(json["updated_at"]);
@@ -51,6 +56,8 @@ class HomePageModel {
     _data["path"] = path;
     _data["id"] = id;
     _data["slug"] = slug;
+    _data["view"] = view;
+
     _data["created_by"] = createdBy;
    if (updatedAt != null) {
       _data["updated_at"] = updatedAt?.toIso8601String();

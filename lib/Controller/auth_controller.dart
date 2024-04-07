@@ -4,23 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import '../../../service/api/auth_provider.dart';
 import 'package:smas_app/Models/AuthModel.dart';
-import 'package:smas_app/Pages/HomePage/home_page.dart';
-import 'package:smas_app/Pages/Auth/login_screen.dart';
-import 'package:smas_app/Pages/components/tab_navigator.dart';
+import 'package:smas_app/Views/Auth/login_screen.dart';
+import 'package:smas_app/Views/components/tab_navigator.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
+import 'package:smas_app/Models/UserModel.dart';
 class AuthController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordconfirmController = TextEditingController();
+  RxList<UserModel> myDetailUser = RxList<UserModel>();
+  RxBool isUser = false.obs;
 
   var buttonEnabled = false.obs;
   var isLoading = false.obs;
   var isShowPassword = false.obs;
+  var isShowPasswordConfirm = false.obs;
   var emailError = ''.obs;
   var passwordError = ''.obs;
   final box = GetStorage();
+
+
+final user = Rx<UserModel?>(null);
+
+void onInit() async {
+  super.onInit();
+  myUser();
+  final userData = await myUser();
+  if (userData != null) {
+    user.value = UserModel.fromJson(userData);
+  }
+}
 
   void submit() async {
     if (emailController.text == '') {
@@ -31,12 +46,13 @@ class AuthController extends GetxController {
     }
     if (emailController.text != '' && passwordController.text != '') {
       isLoading.value = true;
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 2));
       await AuthService.login(emailController.text, passwordController.text)
           .then((value) {
-        print(value);
+        // print(value);
         isLoading.value = false;
         if (value == 'success') {
+          myUser();
           Get.offAll(const BottomTabNavigator());
         }else {
           modalFailedLogin(value);
@@ -60,10 +76,38 @@ class AuthController extends GetxController {
     );
 
     if (response.statusCode == 201) {
-      box.remove('token'); // reset token
-      print("❤️ logout success");
+      box.remove('accestoken'); // reset token
+      
     } else {
       throw Exception('Failedto logout');
+    }
+  }
+  Future<dynamic> myUser() async {
+    final token = await box.read("accestoken");
+    var baseURL = "https://smas.official.biz.id/api/my-user";
+
+    try {
+      final response = await http.get(Uri.parse(baseURL), headers: {
+          'Authorization': 'Bearer $token',
+        }).timeout(const Duration(seconds: 10), onTimeout: () {
+          return http.Response('timeout', 408);
+        });
+  
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+        var user = body["data"];
+        myDetailUser.clear();
+        myDetailUser.add(UserModel.fromJson(user));
+        isUser.value = true;
+
+        return user;
+        
+      } else {
+        throw Exception('User Not found');
+      }
+    } catch (x) {
+      print(x);
+
     }
   }
   Future<void> register() async {
@@ -73,8 +117,6 @@ class AuthController extends GetxController {
     "password": passwordController.text,
     "password_confirmation": passwordconfirmController.text, // corrected the variable name
   };
-  print(newUser);
-  print("${nameController.text}${emailController.text}${passwordController.text}${passwordconfirmController.text}"); // concatenated the strings using string interpolation
 
   if (nameController.text.isNotEmpty &&
       emailController.text.isNotEmpty &&
@@ -126,9 +168,10 @@ class AuthController extends GetxController {
               ),
             ),
             onPressed: () async {
-      
+              isUser.value = false;
+              box.remove('accestoken'); // reset token
               Get.back();
-              Get.offAll(LoginScreen());
+              Get.offAll(const LoginScreen());
             },
             child: const Text('Ya', style: TextStyle(color: Colors.white)),
           ),
