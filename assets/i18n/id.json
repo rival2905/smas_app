@@ -1,0 +1,36 @@
+
+{
+	"app_bar": 
+	{
+		"title": "Aplikasi Saya"
+	},
+	"button": 
+	{
+		"cancel": "Tolak",
+		"change_language": "Ubah Bahasa"
+	},
+	"language": 
+	{
+		"name": 
+		{
+			"en": "English",
+			"id": "Indonesian"
+		},
+		"selected_message": "Bahasa yang dipilih sekarang adalah bahasa {language}",
+		"selection": 
+		{
+			"message": "Tolong pilih bahasa sesuai yang ada dalam daftar",
+			"title": "Pilih bahasa"
+		}
+	},
+	"plural": 
+	{
+		"demo": 
+		{
+			"zero": "Tolong mulai dengan menekan tombol 'Tambah'.",
+			"one": "Kamu telah menekan tolmbol 1 kali",
+			"two": "Kamu telah menekan tolmbol 2 kali",
+			"other": "Kamu telah menekan tolmbol {{value}} kali."
+		}
+	}
+}
